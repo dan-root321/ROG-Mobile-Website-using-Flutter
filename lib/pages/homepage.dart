@@ -1,62 +1,136 @@
-import 'dart:html';
+// import 'dart:html';
 
-import 'package:flutter/material.dart';
+import 'dart:js';
+
+import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rog_website/model/category1.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+// import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  // Define the list
-  List<CategoryModel> categories = [];
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
-  void _getInitialInfo() {
-    categories = CategoryModel.getCategories();
-  }
+class _HomePageState extends State<HomePage> {
+  bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 650;
+
+  bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 650;
+
+  List<String> imageList = [
+    "https://rog.asus.com/laptops-group/"
+        "https://rog.asus.com/laptops-group/"
+        "https://rog.asus.com/graphics-cards-group/"
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenwidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
         appBar: app_bar(),
         endDrawer: end_drawer(),
         body: ListView(
           children: [
             ROG_Elite_bar(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 830,
-                  color: Colors.blue,
-                  child: ListView.separated(
-                    itemCount: categories.length,
-                    scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      width: double.infinity,
+            hero_section(screenHeight, screenwidth, context),
+            if (isMobile(context))
+              Column(
+                children: [
+                  Container(
+                    height: 470,
+                    width: screenwidth,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Title(
+                            color: Colors.black,
+                            child: const Padding(
+                              padding: EdgeInsets.only(top: 60),
+                              child: Text(
+                                "EXPLORE OUR PRODUCTS",
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(height: 20),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 10,
+                            ),
+                            CarouselSlider(
+                                items: items,
+                                options: CarouselOptions(
+                                  autoPlay: false,
+                                  enableInfiniteScroll: false,
+                                  enlargeCenterPage: true,
+                                  height: 150,
+                                ))
+                          ],
+                        )
+                      ],
                     ),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: double.infinity,
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      categories[index].pic_path))),
-                        ),
-                      );
-                    },
                   ),
-                )
-              ],
-            ),
+                ],
+              )
           ],
         ));
   }
 
+  Column hero_section(
+      double screenHeight, double screenwidth, BuildContext context) {
+    return Column(
+      children: [
+        if (isMobile(context))
+          SizedBox(
+              height: screenHeight - 95,
+              width: screenwidth,
+              child: AnotherCarousel(
+                images: const [
+                  AssetImage("assets/pic1.png"),
+                  AssetImage("assets/pic2.png"),
+                  AssetImage("assets/pic3.png"),
+                  AssetImage("assets/pic4.png"),
+                  AssetImage("assets/pic5.png"),
+                  AssetImage("assets/pic6.png"),
+                ],
+                dotSize: 5,
+                indicatorBgPadding: 5.0,
+                animationDuration: Duration(milliseconds: 800),
+              ))
+        else
+          SizedBox(
+              height: screenHeight - 95,
+              width: screenwidth,
+              child: AnotherCarousel(
+                images: const [
+                  AssetImage("assets/rog1.png"),
+                  AssetImage("assets/rog2.png"),
+                  AssetImage("assets/rog3.png"),
+                  AssetImage("assets/rog4.png"),
+                  AssetImage("assets/rog5.png"),
+                  AssetImage("assets/rog6.png"),
+                ],
+                dotSize: 5,
+                indicatorBgPadding: 5.0,
+                animationDuration: Duration(milliseconds: 800),
+              ))
+      ],
+    );
+  }
+
+  // Column _categoriesSection(BuildContext context) {
   SafeArea ROG_Elite_bar() {
     return SafeArea(
       child: Column(
@@ -85,7 +159,7 @@ class HomePage extends StatelessWidget {
   Drawer end_drawer() {
     return Drawer(
       child: Padding(
-        padding: const EdgeInsets.only(left: 0.0),
+        padding: const EdgeInsets.only(left: 10.0),
         child: ListView(
           children: [
             ListTile(
@@ -107,7 +181,6 @@ class HomePage extends StatelessWidget {
           children: [
             Container(
               height: 50,
-              width: 50,
               child: Image(
                 image: AssetImage('assets/rog-1.png'),
               ),
@@ -121,8 +194,8 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      titleTextStyle: TextStyle(
-        color: Colors.red,
+      titleTextStyle: const TextStyle(
+        color: Color(0xE30017),
         fontWeight: FontWeight.w900,
       ),
     );
