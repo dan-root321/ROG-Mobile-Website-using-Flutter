@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     "https://rog.asus.com/laptops-group/"
         "https://rog.asus.com/laptops-group/"
         "https://rog.asus.com/graphics-cards-group/"
+        "https://rog.asus.com/monitors-group/"
   ];
 
   @override
